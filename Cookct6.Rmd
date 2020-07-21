@@ -1,0 +1,35 @@
+---
+title: "Module 6 CT Option 1"
+author: "Ty Cook"
+date: "4/25/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Read File into Dataframe
+```{r}
+courses.df <- read.csv("Coursetopics.csv") #Read Coursetopics.csv into courses.df dataframe
+```
+
+## Association Rules
+###Convert Dataframe into Binary Matrix
+```{r}
+courses.mat <- as.matrix(courses.df) #Read dataframe courses.df into matrix courses.mat
+courses.mat[1:10, ] #Output top 10 Columns and Rows of the Matrix
+```
+### Convert Matrix into Transactions Database
+```{r}
+library(arules) #Arules library to read matrix into transactions database
+
+courses.trans <- as(courses.mat, "transactions") #Read matrix courses.mat into a transactions database courses.trans
+inspect(courses.trans[1:10, ]) #Inspect top 10 Columns and Rows of the transactions database
+```
+
+###Apriori Function
+```{r}
+rules <-apriori(courses.trans, parameter = list(supp = 0.01, conf = 0.5, target = "rules")) #Create Rules tabel using courses.trans with the parmaters of minimum support of 0.01 and confience interval of 0.5 from rules
+inspect(head(sort(rules, by = "lift"), n = 10)) #Inspect rules of first rules where lift is = 10
+```
